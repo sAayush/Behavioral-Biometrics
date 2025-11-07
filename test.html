@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        pre { background-color: #f4f4f4; border: 1px solid #ddd; padding: 10px; height: 300px; overflow-y: scroll; }
+        button { font-size: 1rem; padding: 10px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Behavioral Biometrics Test Client</h1>
+    <button id="connect">Connect</button>
+    <button id="send" disabled>Send Mock Mouse Event</button>
+    <pre id="log"></pre>
+
+    <script>
+        const wsLog = document.getElementById('log');
+        const btnConnect = document.getElementById('connect');
+        const btnSend = document.getElementById('send');
+        let socket;
+
+        function log(message) {
+            // Add to the top of the log
+            wsLog.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}\n` + wsLog.innerHTML;
+        }
+
+        btnConnect.onclick = function() {
+            log("Attempting to connect to WebSocket...");
+            // Connect to our FastAPI server
+            socket = new WebSocket("ws://localhost:8000/ws/ingest");
+
+            socket.onopen = function(e) {
+                log("Status: Connected");
+                btnConnect.disabled = true;
+                btnSend.disabled = false;
+            };
+
+            socket.onmessage = function(event) {
+                log("Server: " + event.data);
+            };
+
+            socket.onclose = function(event) {
+                log("Status: Disconnected");
+                btnConnect.disabled = false;
+                btnSend.disabled = true;
+            };
+
+            socket.onerror = function(error) {
+                log("Error: WebSocket connection failed.");
+            };
+        };
+
+        btnSend.onclick = function() {
+            const mockEvent = {
+                type: 'mousemove',
+                x: Math.floor(Math.random() * 800),
+                y: Math.floor(Math.random() * 600),
+                timestamp: Date.now()
+            };
+            const message = JSON.stringify(mockEvent);
+            log("Client: " + message);
+            socket.send(message);
+        };
+    </script>
+</body>
+</html>
