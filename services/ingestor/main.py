@@ -2,11 +2,16 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import logging
 import redis
 import json
-import os                  # <-- Import os
+import os
+import sys
 from dotenv import load_dotenv # <-- Import load_dotenv
 
 # --- Configuration ---
-load_dotenv() # <-- This is the magic line. It reads your .env file.
+project_root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(project_root)
+
+# Load the .env file from the PROJECT ROOT
+load_dotenv(os.path.join(project_root, '.env'))
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
