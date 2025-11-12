@@ -78,7 +78,7 @@ def main():
                         x=event_data.get('x'),
                         y=event_data.get('y'),
                         key=event_data.get('key'),
-                        timestamp=event_data.get('timestamp')
+                        timestamp=event_data.get('timestamp'),
                         user_id=event_data.get('user_id')
                         # 'received_at' will be set by the DB default
                     )
