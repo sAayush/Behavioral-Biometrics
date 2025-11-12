@@ -1,1 +1,0 @@
-Our 2nd FastAPI app

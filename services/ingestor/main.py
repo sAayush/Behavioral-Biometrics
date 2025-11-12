@@ -24,6 +24,8 @@ REDIS_PORT = os.getenv("REDIS_PORT")
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
 REDIS_CHANNEL = "behavioral-stream"
 
+JWT_SECRET = os.getenv("JWT_SECRET")
+
 # Connect to your Redis Cloud instance
 try:
     redis_client = redis.Redis(
@@ -95,7 +97,7 @@ def read_root():
 
 
 @app.websocket("/ws/ingest")
-async def websocket_endpoint(websocket: WebSocket, token: str | None = Query(default=None)):
+async def websocket_endpoint(websocket: WebSocket, token: str | None = None):
     """
     The main WebSocket endpoint for ingesting behavioral data.
     """
