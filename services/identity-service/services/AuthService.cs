@@ -146,7 +146,7 @@ namespace IdentityService.Services
 
             // Revoke old refresh tokens for this user (optional: keep last N tokens)
             var oldTokens = await _context
-                .RefreshTokens.Where(rt => rt.UserId == user.Id && rt.IsActive)
+                .RefreshTokens.Where(rt => rt.UserId == user.Id && user.IsActive)
                 .ToListAsync();
 
             foreach (var oldToken in oldTokens)
