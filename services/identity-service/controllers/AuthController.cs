@@ -204,5 +204,20 @@ namespace IdentityService.Controllers
                 );
             }
         }
+
+        /// <summary>
+        /// Logout a user
+        /// </summary>
+        /// <param name="email">Email of the user to logout</param>
+        /// <returns>Success response</returns>
+        /// <response code="200">User logged out successfully</response>
+        /// <response code="400">Invalid request data</response>
+        [HttpPost("logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> LogoutUser([FromQuery] string email)
+        {
+            
+        }
     }
 }

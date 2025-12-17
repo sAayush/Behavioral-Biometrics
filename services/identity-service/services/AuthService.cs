@@ -270,5 +270,18 @@ namespace IdentityService.Services
                 );
             }
         }
+
+        public async Task LogoutUserAsync(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found: {Email}", email);
+                throw new UnauthorizedAccessException("User not found");
+            }
+            user.IsActive = false;
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("User logged out successfully: {Email}", email);
+        }
     }
 }
