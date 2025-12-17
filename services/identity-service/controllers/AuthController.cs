@@ -217,7 +217,24 @@ namespace IdentityService.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LogoutUser([FromQuery] string email)
         {
-            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse { Message = "Invalid request data" });
+            }
+
+            try
+            {
+                await _authService.LogoutUserAsync(email);
+                return Ok(new { Message = "User logged out successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during user logout");
+                return StatusCode(
+                    500,
+                    new ErrorResponse { Message = "An error occurred during user logout" }
+                );
+            }
         }
     }
 }
